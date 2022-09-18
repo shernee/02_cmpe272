@@ -1,0 +1,11 @@
+server {
+  listen 8080;
+
+  root {{ new_root }};
+
+  server_name _;
+  
+  location / {
+   try_files $uri.html $uri $uri/ =404;
+  }
+}

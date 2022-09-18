@@ -1,0 +1,38 @@
+---
+- name: Install and Deploy an nginx webserver
+  hosts: webservers
+  vars: 
+    page_title: "Welcome to SJSU"
+    page_header: "Hello World"
+    new_root: /var/www/sjsu
+  tasks:
+
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: latest
+      update_cache: yes
+
+  - name: Create your website directory
+    file:
+      path: /var/www/sjsu
+      state: directory
+      mode: '0755'
+
+  - name: Apply page template
+    template:
+      src: ~/templates/sjsu_html_template.html.j2
+      dest: /var/www/sjsu/index.html
+
+  - name: Apply conf template
+    template:
+      src: ~/templates/nginx.conf.j2
+      dest: /etc/nginx/sites-available/default
+    notify: 
+      - Restart nginx
+
+  handlers:
+  - name: Restart nginx
+    service:
+      name: nginx
+      state: restarted

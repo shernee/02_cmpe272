@@ -1,0 +1,16 @@
+---
+- name: un-deploy Nginx
+  hosts: webservers
+  tasks:
+
+  - name: Stop Nginx service
+    service:
+      name: nginx
+      state: stopped
+
+  - name: Un-install Nginx
+    apt:
+      name: nginx
+      state: absent
+      autoremove: yes
+      purge: yes

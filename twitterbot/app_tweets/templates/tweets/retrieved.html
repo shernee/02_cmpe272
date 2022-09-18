@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>My Twitter</title>
+    </head>
+    <body>
+        <h3>Your Tweet</h3>
+        <div>
+            <i>{{ text }}</i>
+        </div>
+        <div>Created at <i>{{ created_at }}</i> UTC</div>
+        <div>Language is <i>{{retrieved_tweet.lang }}</i></div>
+        <div>Author is <i>{{ author_id }}</i></div>
+        <a href="{% url 'app_tweets:home' %}">Back to Home</a>
+    </body>
+</html>

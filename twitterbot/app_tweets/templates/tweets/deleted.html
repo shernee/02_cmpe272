@@ -1,0 +1,11 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>My Twitter</title>
+    </head>
+    <body>
+        <h3>Your Tweet <i>{{ text }}</i> with ID <i>{{ tweet_id }}</i> has been deleted!</h3>
+        <a href="{% url 'app_tweets:home' %}">Back to Home</a>
+    </body>
+</html>

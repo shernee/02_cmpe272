@@ -53,24 +53,6 @@ class DeletedAPIServicesTest(TestCase):
         self.assertEqual(count_after, count_before-1)
 
 
-# class DeletedViewTest(TestCase):
-#     def setUp(self):
-#         self.client = Client()
-#         tweet_id = "123"
-#         tweet_text="A Sample"
-#         models.Tweet.objects.create(tweet_id=tweet_id, text=tweet_text)
-
-#     @patch('app_tweets.services.make_delete_request')
-#     def test_details(self, mock_make_delete_request):
-
-#         mock_make_delete_request.return_value = create_mock_response(
-#             status_code=200)
-
-#         response = self.client.post('/tweets/deleted/')
-
-#         self.assertEqual(response.status_code, 200)
-
-#         self.assertContains(response, "<title>My Twitter</title>")
         
 
 

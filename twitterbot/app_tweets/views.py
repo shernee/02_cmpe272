@@ -19,7 +19,8 @@ def posted(request):
             return HttpResponse("There is a problem with your request!")
 
         response_dict = {
-            "id": tweet_model.tweet_id
+            "id": tweet_model.tweet_id,
+            "text": tweet_model.text
         }
 
         return render(

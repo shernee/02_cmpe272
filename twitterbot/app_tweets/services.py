@@ -20,12 +20,6 @@ def get_oauth_session():
 
     return oauth
 
-# def create_bearer_header(r):
-#     bearer_token = os.environ.get("BEARER_TOKEN")
-#     r.headers["Authorization"] = f"Bearer {bearer_token}"
-#     r.headers["User-Agent"] = "v2ListLookupPython"
-#     return r
-
 
 def make_post_request(text: str):
     oauth = get_oauth_session()

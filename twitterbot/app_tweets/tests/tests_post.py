@@ -4,7 +4,6 @@ from unittest.mock import patch
 from requests.models import Response
 
 from app_tweets import services
-from twitterbot.app_tweets.tests.tests_get import TWEET_ID
 
 TWEET_ID="123"
 TWEET_TEXT="A Sample"

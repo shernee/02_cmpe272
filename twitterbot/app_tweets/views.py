@@ -1,8 +1,8 @@
-from multiprocessing.sharedctypes import Value
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from app_tweets import models, services
+import errors
 
 def home(request):    
     tweets = models.Tweet.objects.order_by('date_added')
@@ -34,14 +34,20 @@ def deleted(request):
     tweet_id = request.POST.get("tweet-id")
 
     try:
-        deleted_tweet_dict = services.delete_tweet(tweet_id=tweet_id)
+        deleted_tweet_id = services.delete_tweet(tweet_id=tweet_id)
     except ValueError:
         return HttpResponse("There is a problem with your request!")
+    except errors.TweetDoesNotExist as e:
+        return HttpResponse(e.message, status=e.status_code)
+
+    context_dict = {
+        "deleted_tweet_id": deleted_tweet_id
+    }
 
     return render(
         request=request, 
         template_name='tweets/deleted.html', 
-        context=deleted_tweet_dict)
+        context=context_dict)
 
 
 def retrieved(request, tweet_id):

@@ -44,13 +44,37 @@ class DeletedAPIServicesTest(TestCase):
         mock_make_delete_request.return_value = create_mock_response(
             status_code=200)
 
-        count_before = models.Tweet.objects.count()     
-        deleted_model_dict = services.delete_tweet(tweet_id=TWEET_ID)
-        count_after = models.Tweet.objects.count()
+        before_count = models.Tweet.objects.count()     
+        deleted_tweet_id = services.delete_tweet(tweet_id=TWEET_ID)
+        after_count = models.Tweet.objects.count()
 
-        self.assertEqual(deleted_model_dict['tweet_id'], TWEET_ID)
+        self.assertEqual(deleted_tweet_id, TWEET_ID)
 
-        self.assertEqual(count_after, count_before-1)
+        self.assertEqual(after_count, before_count-1)
+
+        with self.assertRaises(models.Tweet.DoesNotExist):
+            models.Tweet.objects.get(tweet_id=TWEET_ID)
+
+
+class DeletedViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        models.Tweet.objects.create(tweet_id=TWEET_ID, text=TWEET_TEXT)
+
+    @patch('app_tweets.services.make_delete_request')
+    def test_details(self, mock_make_delete_request):
+        """
+        Test the view on sending a post request to the DELETE api
+        """
+        
+        mock_make_delete_request.return_value = \
+            create_mock_response(status_code=200)
+
+        response = self.client.post('/tweets/deleted/', data={"tweet-id": TWEET_ID})
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "<title>My Twitter</title>")
 
 
         

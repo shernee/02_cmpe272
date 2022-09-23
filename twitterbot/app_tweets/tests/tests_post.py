@@ -64,7 +64,7 @@ class PostedViewTest(TestCase):
             tweet_id=TWEET_ID,
             tweet_text=TWEET_TEXT)
 
-        response = self.client.post('/tweets/posted/')
+        response = self.client.post('/tweets/posted/', data={"tweet": TWEET_TEXT})
 
         self.assertEqual(response.status_code, 200)
 

@@ -1,11 +1,13 @@
 from django.utils import dateparse
 
-import os
 from requests_oauthlib import OAuth1Session
-import requests
 import logging
+import requests
+import os
 
 from app_tweets import models
+import errors
+
 
 def get_oauth_session():
     consumer_key = os.environ.get("API_KEY")
@@ -52,6 +54,8 @@ def make_get_request(id: str):
     
 
 def post_tweet(tweet_text):
+    if len(tweet_text) < 1:
+        raise ValueError("Minimum Tweet length not met")
     
     response = make_post_request(text=tweet_text)
     response_status = response.status_code
@@ -67,18 +71,22 @@ def post_tweet(tweet_text):
 
 
 def delete_tweet(tweet_id):
-    response = make_delete_request(id=tweet_id)
+    try:
+        tweet_model = models.Tweet.objects.get(tweet_id=tweet_id)
+    except models.Tweet.DoesNotExist:
+        logging.error(f'Tweet ID {tweet_id} does not exist')
+        raise errors.TweetDoesNotExist
+
+    response = make_delete_request(id=tweet_model.tweet_id)
     response_status = response.status_code
 
     if response_status == 200:
-        tweet_model = models.Tweet.objects.filter(tweet_id=tweet_id)
-        deleted_tweet_dict = tweet_model.values()[0]
         tweet_model.delete()
     else:
         logging.error("Request returned an error: {} {}".format(response_status, response.text))
         raise ValueError
 
-    return deleted_tweet_dict
+    return tweet_id
 
 
 def retrieve_tweet(tweet_id):
@@ -101,3 +109,6 @@ def retrieve_tweet(tweet_id):
         raise ValueError
 
     return tweet_model
+
+
+

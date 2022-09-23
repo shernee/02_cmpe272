@@ -104,7 +104,7 @@ class RetrievedViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        self.assertContains(response, "<title>My Twitter</title>")
+        self.assertContains(response, TWEET_TEXT)
         
 
 
